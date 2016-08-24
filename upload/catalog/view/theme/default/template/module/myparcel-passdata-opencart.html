@@ -79,12 +79,34 @@
                 } catch (err) {}
 
                 try {
-                    formulier.getElementsByName("postcode")[1].value       = postalCodeNum + postalCodeAlpha;
+                    formulier.getElementsByName("postcode")[1].value  = postalCodeNum + postalCodeAlpha;
                 } catch (err) {}
 
-                try {
-                    formulier.getElementsByName("address_1")[1].value = street + ' ' + houseNr + ' ' + houseNrAdd;
-                } catch (err) {}
+                /**** Since the fix for postcodeNL ****/
+                var address2 = formulier.getElementById("input-shipping-address-2");
+                var postcodeNL = false;
+                if (address2) {
+                    var parent_address2 = address2.parentNode.parentNode;
+                    if (parent_address2.classList.contains('required'))
+                    {
+                        postcodeNL = true;
+                        address2.value = houseNr + ' ' + houseNrAdd;
+                        street.slice(0, street.lastIndexOf(address2.value));
+                    }
+                }
+
+                if (postcodeNL) {
+                    try {
+                        formulier.getElementsByName("address_1")[1].value = street;
+                    } catch (err) {
+                    }
+                } else {
+                    try {
+                        formulier.getElementsByName("address_1")[1].value = street + ' ' + houseNr + ' ' + houseNrAdd;
+                    } catch (err) {
+                    }
+                }
+                /**** End the fix for postcodeNL ****/
 
                 try {
                     formulier.getElementsByName("city")[1].value      = city;
@@ -152,6 +174,107 @@
 
                 // **********************************************************************************
                 // ******************************END OF QUICKCHECKOUT FIX****************************
+                // **********************************************************************************
+				
+				// **********************************************************************************
+                // ****************************START OF JOURNAL THEME FIX****************************
+                // **********************************************************************************
+                if (formulier.getElementById("shipping-new") && formulier.getElementById("shipping-address")) {
+                    try {
+                        var field_company = formulier.getElementById("input-shipping-company");
+                        field_company.value   = shopname;
+                        fireEvent(field_company, 'change');
+                    } catch (err) {}
+
+                    try {
+                        var field_postcode = formulier.getElementById("input-shipping-postcode");
+                        field_postcode.value   = postalCodeNum + postalCodeAlpha;
+                        fireEvent(field_postcode, 'change');
+                    } catch (err) {}
+
+                    try {
+                        var field_address1 = formulier.getElementById("input-shipping-address-1");
+                        field_address1.value = street + ' ' + houseNr + ' ' + houseNrAdd;
+                        fireEvent(field_address1, 'change');
+                    } catch (err) {}
+
+                    try {
+                        var field_city = formulier.getElementById("input-shipping-city");
+                        field_city.value = city;
+                        fireEvent(field_city, 'change');
+                    } catch (err) {}
+
+                    try {
+                        var country_select =  formulier.getElementById("input-shipping-country");
+                        country_select.value = 150;
+
+                        for (var i = 0; i < country_select.options.length; i++) {
+                            if (country_select.options[i].value == 150) {
+                                country_select.selectedIndex = i;
+                                break;
+                            }
+                        }
+                    } catch (err) {}
+
+                    try{
+                        fireEvent(country_select, 'change');
+                    }catch(ex){
+                        // Possbile IE 11
+                        //formulier.getElementById('add_address').submit();
+                    }
+                }
+
+
+                // **********************************************************************************
+                // ******************************END OF JOURNAL THEME FIX****************************
+                // **********************************************************************************
+				
+				// **********************************************************************************
+                // ****************************START OF livvlifestyle.nl FIX****************************
+                // **********************************************************************************
+                if (formulier.getElementById("simplecheckout_shipping_address")) {
+                    try {
+                        var field_company = formulier.getElementById("shipping_address_company");
+                        field_company.value   = shopname;
+                    } catch (err) {}
+
+                    try {
+                        var field_postcode = formulier.getElementById("shipping_address_postcode");
+                        field_postcode.value   = postalCodeNum + postalCodeAlpha;
+                    } catch (err) {}
+
+                    try {
+                        var field_address1 = formulier.getElementById("shipping_address_address_1");
+                        field_address1.value = street + ' ' + houseNr + ' ' + houseNrAdd;
+                    } catch (err) {}
+
+                    try {
+                        var field_city = formulier.getElementById("shipping_address_city");
+                        field_city.value = city;
+                    } catch (err) {}
+
+                    try {
+                        var country_select =  formulier.getElementById("shipping_address_country_id");
+                        country_select.value = 150;
+
+                        for (var i = 0; i < country_select.options.length; i++) {
+                            if (country_select.options[i].value == 150) {
+                                country_select.selectedIndex = i;
+                                break;
+                            }
+                        }
+                    } catch (err) {}
+
+                    try{
+                        fireEvent(country_select, 'change');
+                    }catch(ex){
+                        // Possbile IE 11
+                        //formulier.getElementById('add_address').submit();
+                    }
+                }
+
+                // **********************************************************************************
+                // ******************************END OF livvlifestyle.nl FIX****************************
                 // **********************************************************************************
             }
         }

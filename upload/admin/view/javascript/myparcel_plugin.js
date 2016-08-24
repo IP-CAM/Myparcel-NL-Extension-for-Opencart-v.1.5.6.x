@@ -27,8 +27,8 @@ MyParcel.opencart = {
     	// pdf image
     	var mypa_img = document.createElement('img');
     	mypa_img.alt = 'print';
-    	mypa_img.src = mano_admin_path+'model/myparcel/images/myparcel_pdf.png';
-    	if(retour == 1) mypa_img.src = mano_admin_path+'model/myparcel/images/myparcel_retour.png';
+    	mypa_img.src = addresas+'admin/model/myparcel/images/myparcel_pdf.png';
+    	if(retour == 1) mypa_img.src = addresas+'admin/model/myparcel/images/myparcel_retour.png';
     	mypa_img.style.border = 0;
     	
     	// pdf image link
@@ -151,8 +151,14 @@ function processConsignmentSelection(a, b)
 {
     var consignmentList2 = Array();
     b || (b = "cb");
+	
+	/** Start @Since version 1.3.4 **/
+    var checkboxes = document.getElementsByClassName('mypafunc');
+    a = checkboxes.length;
+    /** End @Since version 1.3.4 **/
+	
     //console.log(document.getElementById('form'));
-    for (var e = document.getElementById('form-order')/*adminForm*//*, c = e.toggle.checked*/, f = a, g = 0, d = 0; d < f; d++) {
+    for (var e = document.getElementById('form')/*adminForm*//*, c = e.toggle.checked*/, f = a, g = 0, d = 0; d < f; d++) {
         var h = e[b + "" + d];
         if (h)
 	{
