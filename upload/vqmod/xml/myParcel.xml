@@ -207,8 +207,7 @@ function pakjegemak()
 	<ignoreif><![CDATA[// a_vqmod_d_quickcheckout.xml]]></ignoreif>
 	<operation>
 		<search><![CDATA[$this->document->addScript('catalog/view/javascript/d_quickcheckout/compress/d_quickcheckout.min.js');]]></search>
-		<add position="after"><![CDATA[$this->document->addScript('catalog/view/javascript/myparcel/myparcel_frontend.js');
-		]]></add>
+		<add position="after"><![CDATA[$this->document->addScript('catalog/view/javascript/myparcel/myparcel_frontend.js');]]></add>
 	</operation>
 </file>
 
