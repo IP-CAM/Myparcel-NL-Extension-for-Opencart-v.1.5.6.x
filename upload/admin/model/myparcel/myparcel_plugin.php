@@ -275,17 +275,31 @@ $q = 'SELECT virtuemart_order_item_id, product_quantity, order_item_name,
 function isPgAddress($name, $street, $gkzip, $gkcity)
 {
     global $db;
-    $query_pg_address = $db->query(
-        sprintf('
-                SELECT * FROM '.DB_PREFIX.'orders_myparcel_pg_address WHERE `name`="%s" AND `street`="%s" AND `house_number`="%s" AND `postcode`="%s" AND `town`="%s" LIMIT 1'
-            ,
-            $name,                                                          // Name
-            isset($street['street']) ? $street['street'] : '',              // Street
-            isset($street['house_number']) ? $street['house_number'] : '',  // House number
-            $gkzip,                                                         // Postcode
-            $gkcity                                                         // City
-        )
-    );
+
+    if ($name == '_no_field_') {
+        $sql = 'SELECT * FROM '.DB_PREFIX.'orders_myparcel_pg_address WHERE `street`="%s" AND `house_number`="%s" AND `postcode`="%s" AND `town`="%s" LIMIT 1';
+        $query_pg_address = $db->query(
+            sprintf(
+                $sql,
+                isset($street['street']) ? $street['street'] : '',              // Street
+                isset($street['house_number']) ? $street['house_number'] : '',  // House number
+                $gkzip,                                                         // Postcode
+                $gkcity                                                         // City
+            )
+        );
+    } else {
+        $sql = 'SELECT * FROM '.DB_PREFIX.'orders_myparcel_pg_address WHERE `name`="%s" AND `street`="%s" AND `house_number`="%s" AND `postcode`="%s" AND `town`="%s" LIMIT 1';
+        $query_pg_address = $db->query(
+            sprintf(
+                $sql,
+                $name,                                                          // Name
+                isset($street['street']) ? $street['street'] : '',              // Street
+                isset($street['house_number']) ? $street['house_number'] : '',  // House number
+                $gkzip,                                                         // Postcode
+                $gkcity                                                         // City
+            )
+        );
+    }
 
     if ($query_pg_address->num_rows) {
         return true;
@@ -296,6 +310,7 @@ function isPgAddress($name, $street, $gkzip, $gkcity)
 function _splitStreet($fullStreet)
 {
     $split_street_regex = '~(?P<street>.*?)\s?(?P<street_suffix>(?P<number>[\d]+)-?(?P<number_suffix>[a-zA-Z/\s]{0,5}$|-?[0-9/]{0,5}$|\s[a-zA-Z]{1}-?[0-9]{0,3}$))$~';
+    //$split_street_regex = '~(?P<street>.*?)\s?(?P<street_suffix>(?P<number>[\d]+)?(?P<number_suffix>[a-zA-Z/\s]{0,5}$|-?[0-9/]{0,5}$|\s[a-zA-Z]{1}-?[0-9]{0,3}$))$~';
     $fullStreet = preg_replace("/[\n\r]/", "", $fullStreet);
     $result = preg_match($split_street_regex, $fullStreet, $matches);
 
@@ -312,6 +327,39 @@ function _splitStreet($fullStreet)
     return $matches;
 }
 
+/** START @Since the fix for negative house number (64-69)
+ * 64 is house number and 69 is additional number
+ **/
+function _splitMultipleHouseNumberStreet($address, $force=true)
+{
+    $ret = array();
+    $ret['house_number']    = '';
+    $ret['number_addition'] = '';
+
+    $address = str_replace(array('?', '*', '[', ']', ',', '!'), ' ', $address);
+    $address = preg_replace('/\s\s+/', ' ', $address);
+
+    preg_match('/^([0-9]*)(.*?)([0-9]+)(.*)/', $address, $matches);
+
+    if (!empty($matches[2]))
+    {
+        $ret['street']          = trim($matches[1] . $matches[2]);
+        $ret['house_number']    = trim($matches[3]);
+        $ret['number_addition'] = trim($matches[4]);
+    }
+    else // no street part
+    {
+        $ret['street'] = $address;
+    }
+
+    if ($force) {
+        $ret['force_addition_number'] = true;
+    }
+
+    return $ret;
+}
+/** END @Since the fix for negative house number (64-69) **/
+
 function getAddressComponents($address)
 {
     $matches = _splitStreet($address);
@@ -327,13 +375,15 @@ function getAddressComponents($address)
         $ret['street'] = $address;
     }
 
-	/** START @Since the fix for negative house number (64-69) **/
+    /** START @Since the fix for negative house number (64-69) **/
     if (strlen($ret['street']) && substr($ret['street'], -1) == '-') {
         $ret['street'] = str_replace(' -', '', $ret['street']);
-        return getAddressComponents( $ret['street']);
+        $ret['street'] .= ' -' . $ret['house_number'];
+        $ret['force_addition_number'] = true;
+        return _splitMultipleHouseNumberStreet( $ret['street'] );
     }
     /** END @Since the fix for negative house number (64-69) **/
-	
+
     return $ret;
 }
 
