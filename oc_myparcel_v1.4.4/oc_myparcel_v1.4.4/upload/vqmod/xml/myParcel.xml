@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>VQMOD MYPARCEL</id>
+	<version>1.4.4</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>balticode.com</author>
+
+	<file name="admin/view/template/sale/order_list.tpl">
+		<operation>
+			<search position="after" error="log"><![CDATA[<?php echo $header; ?>]]></search>
+			<add><![CDATA[<?php $db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
+                        $check_if_table = $db->query("SHOW TABLES LIKE '" . DB_PREFIX . "orders_myparcel'");
+if ($check_if_table->num_rows < 1)
+{
+   $db->query("CREATE TABLE IF NOT EXISTS " . DB_PREFIX . "orders_myparcel (`orders_myparcel_id` int(11) NOT NULL AUTO_INCREMENT, `orders_id` int(11) NOT NULL, `consignment_id` bigint(20) NOT NULL, `retour` tinyint(1) NOT NULL DEFAULT '0', `tracktrace` varchar(32) NOT NULL, `postcode` varchar(6) NOT NULL, `tnt_status` varchar(255) NOT NULL, `tnt_updated_on` datetime NOT NULL, `tnt_final` tinyint(1) NOT NULL DEFAULT '0', PRIMARY KEY (`orders_myparcel_id`));");
+} ?>]]></add>
+		</operation>
+		<operation>
+			<search position="before" error="log"><![CDATA[<td class="right"><?php echo $column_action; ?></td>]]></search>
+			<add><![CDATA[<td class="left" style="text-align: center;">
+                <a href="#" class=""><?php echo "MyParcel Labels"; ?></a>
+                <?php $_SESSION['MYPARCEL_VISIBLE_CONSIGNMENTS'] = ''; ?>
+                <script type="text/javascript" src="view/javascript/myparcel_plugin.js"></script>
+              </td>]]></add>
+		</operation>
+		<operation>
+			<search position="after" error="log"><![CDATA[<td><input type="text" name="filter_date_modified" value="<?php echo $filter_date_modified; ?>" size="12" class="date" /></td>]]></search>
+			<add><![CDATA[<td class="left" style="text-align: center;">
+                <input type="checkbox" onclick="selectAllConsignmentsForPrint(this);">
+                <a class="myparcel-pdf myparight" onclick="return printConsignmentSelection();" href="#">
+                  <img src="<?php echo HTTP_SERVER; ?>model/myparcel/images/myparcel_pdf.png">
+                </a>
+		<a class="myparcel-pdf myparight" onclick="return processConsignmentSelection('24');" href="#">
+                  <img src="<?php echo HTTP_SERVER; ?>model/myparcel/images/myparcel_pdf_add.png">
+                </a>
+              </td>]]></add>
+		</operation>
+		<operation>
+			<search position="replace" error="log"><![CDATA[<?php if ($orders) { ?>]]></search>
+			<add><![CDATA[<?php if ($orders) { $order_inc=0; ?>]]></add>
+		</operation>
+		<operation>
+			<search position="replace" error="log"><![CDATA[<input type="checkbox" name="selected[]" value="<?php echo $order['order_id']; ?>" checked="checked" />]]></search>
+			<add><![CDATA[<input id="cb<?php echo $order_inc++;?>" type="checkbox" name="selected[]" value="<?php echo $order['order_id']; ?>" checked="checked" />]]></add>
+		</operation>
+		<operation>
+			<search position="replace" error="log"><![CDATA[<input type="checkbox" name="selected[]" value="<?php echo $order['order_id']; ?>" />]]></search>
+			<add><![CDATA[<input id="cb<?php echo $order_inc++;?>" type="checkbox" name="selected[]" value="<?php echo $order['order_id']; ?>" />]]></add>
+		</operation>
+		<operation>
+			<search position="after" error="log"><![CDATA[<td class="text-left" id="date-modified-<?php echo $order['order_id']; ?>"><?php echo $order['date_modified']; ?></td>]]></search>
+			<add><![CDATA[<td style="text-align: right;">
+                <div id="mypa_exist_<?php echo $order['order_id']; ?>" style="display: inline-block;">
+                <?php
+					if(isset($order['vendors'])&&is_object($order['vendors']))
+					{
+						$vendors = $order['vendors'];
+                        $countries = $order['countries'];
+
+                        $countryCode = "NL";
+                        for ($i3=0, $m=count( $countries->rows ); $i3 < $m; $i3++)
+                        {
+                            $rowCountry = $countries->rows[$i3];
+                            if($rowCountry['country_id'] == $order['shipping_country_id']){
+                                $countryCode = $rowCountry['iso_code_2'];
+                            }
+                        }
+
+                        for ($i2=0, $n=count( $vendors->rows ); $i2 < $n; $i2++)
+						{
+							$row = $vendors->rows[$i2];
+
+							$_SESSION['MYPARCEL_VISIBLE_CONSIGNMENTS'] .= $row['consignment_id'] . '|';
+                            //$mypa_tracktrace_link = 'https://www.postnlpakketten.nl/klantenservice/tracktrace/basicsearch.aspx?lang=nl&B=' . $row['tracktrace'] . '&P=' . $row['postcode'];
+                            $mypa_tracktrace_link = sprintf('http://postnl.nl/tracktrace/?B=%s&D=%s&P=%s&T=C', $row['tracktrace'], $countryCode, $row['postcode']);
+							$mypa_tnt_status      = empty($row['tnt_status']) ? 'Track&Trace' : $row['tnt_status'];
+							$mypa_pdf_image       = ($row['retour'] == 1) ? 'myparcel_retour.png' : 'myparcel_pdf.png';
+							echo '<div><input type="checkbox" value="' . $row['consignment_id'] . '" class="mypaleft mypacheck" /><a href="' . $mypa_tracktrace_link . '" target="_blank">' . $mypa_tnt_status . '</a><a href="#" onclick="return printConsignments(\'' . $row['consignment_id'] . '\');" class="myparcel-pdf"><img src="'.HTTP_SERVER.'model/myparcel/images/'.$mypa_pdf_image.'" /></a></div>';
+						}
+					}
+                ?>
+		</div>
+                <span class="mypafunc" style="text-align: right;">
+                  <a onclick="return createNewConsignment('<?php echo $order['order_id']; ?>');" class="myparcel-consignment-new" href="#">
+                    <img src="<?php echo HTTP_SERVER; ?>model/myparcel/images/myparcel_pdf_add.png">
+                  </a>
+                  <a onclick="return createNewConsignment('<?php echo $order['order_id']; ?>', true);" class="myparcel-consignment-retour" href="#">
+                    <img src="<?php echo HTTP_SERVER; ?>model/myparcel/images/myparcel_retour_add.png">
+                  </a>
+                </span>
+              </td>]]></add>
+		</operation>
+	</file>
+
+	<file name="admin/view/template/sale/order_list.tpl">
+		<operation>
+
+			<search position="after" error="log"><![CDATA[<td class="left"><?php echo $order['date_modified']; ?></td>]]></search>
+			<add><![CDATA[<td class="left" style="text-align: right;">
+                <div id="mypa_exist_<?php echo $order['order_id']; ?>" style="display: inline-block;">
+                <?php
+                    $query = "SELECT * FROM `" . DB_PREFIX . "orders_myparcel` WHERE `orders_id` = '" . $order['order_id'] . "'";
+                    $vendors = $db->query( $query );
+
+                    $order_query = $db->query("SELECT *, (SELECT CONCAT(c.firstname, ' ', c.lastname) FROM " . DB_PREFIX . "customer c WHERE c.customer_id = o.customer_id) AS customer FROM `" . DB_PREFIX . "order` o WHERE o.order_id = '" . (int)$order['order_id'] . "'");
+
+                    $countryQuery = $db->query( "SELECT * FROM `" . DB_PREFIX . "country` WHERE country_id = ".(int)$order_query->row['shipping_country_id']);
+
+                    $countryCode = "NL";
+                    if ($countryQuery->num_rows) {
+                        $countryCode = $countryQuery->row['iso_code_2'];
+                    }
+
+                    for ($i2=0, $n=count( $vendors->rows ); $i2 < $n; $i2++)
+                    {
+                        $row = $vendors->rows[$i2];
+
+                        $_SESSION['MYPARCEL_VISIBLE_CONSIGNMENTS'] .= $row['consignment_id'] . '|';
+                        //$mypa_tracktrace_link = 'https://www.postnlpakketten.nl/klantenservice/tracktrace/basicsearch.aspx?lang=nl&B=' . $row['tracktrace'] . '&P=' . $row['postcode'];
+                        $mypa_tracktrace_link = sprintf('http://postnl.nl/tracktrace/?B=%s&D=%s&P=%s&T=C', $row['tracktrace'], $countryCode, $row['postcode']);
+                        $mypa_tnt_status      = empty($row['tnt_status']) ? 'Track&Trace' : $row['tnt_status'];
+                        $mypa_pdf_image       = ($row['retour'] == 1) ? 'myparcel_retour.png' : 'myparcel_pdf.png';
+                        echo '<div><input type="checkbox" value="' . $row['consignment_id'] . '" class="mypaleft mypacheck" /><a href="' . $mypa_tracktrace_link . '" target="_blank">' . $mypa_tnt_status . '</a><a href="#" onclick="return printConsignments(\'' . $row['consignment_id'] . '\');" class="myparcel-pdf"><img src="'.HTTP_SERVER .'model/myparcel/images/'.$mypa_pdf_image.'" /></a></div>';
+                    }
+                ?>
+		</div>
+                <span class="mypafunc" style="text-align: right;">
+                  <a onclick="return createNewConsignment('<?php echo $order['order_id']; ?>');" class="myparcel-consignment-new" href="#">
+                    <img src="<?php echo HTTP_SERVER; ?>model/myparcel/images/myparcel_pdf_add.png">
+                  </a>
+                  <a onclick="return createNewConsignment('<?php echo $order['order_id']; ?>', true);" class="myparcel-consignment-retour" href="#">
+                    <img src="<?php echo HTTP_SERVER; ?>model/myparcel/images/myparcel_retour_add.png">
+                  </a>
+                </span>
+              </td>]]></add>
+		</operation>
+
+	</file>
+
+	<file name="catalog/view/theme/default/template/checkout/shipping_address.tpl">
+		<operation>
+			<search position="after" error="log"><![CDATA[<div id="shipping-new" style="display: <?php echo ($addresses ? 'none' : 'block'); ?>;">]]></search>
+			<add><![CDATA[<?php if ($this->config->get('myparcel_module_frontend')) { ?>
+<p>Kies <span onclick="return pakjegemak();" style="cursor: pointer; text-decoration: underline">hier</span> uw locatie indien u het pakket op een PostNL afleverlocatie wil laten bezorgen.</p>
+<?php
+    $username = $this->config->get('myparcel_module_username');
+    $api_key  = $this->config->get('myparcel_module_api_key');
+
+    $webshop = HTTPS_SERVER . '/catalog/view/theme/default/template/module/myparcel-passdata-opencart.html';//JURI::base().DS.'components'.DS.'com_myparcel'.DS. '/myparcel-passdata-virtuemart.html';
+    $uw_hash = hash_hmac('sha1', $username . 'MyParcel' . $webshop, $api_key);
+?>
+<script type="text/javascript">
+var pg_popup;
+function pakjegemak()
+{
+    if(!pg_popup || pg_popup.closed)
+    {
+        pg_popup = window.open(
+            '//www.myparcel.nl/pakjegemak-locatie?hash=<?php echo $uw_hash; ?>&webshop=<?php echo urlencode($webshop); ?>&user=<?php echo $username; ?>',
+            'myparcel-pakjegemak',
+            'width=980,height=680,dependent,resizable,scrollbars'
+        );
+        if(window.focus) { pg_popup.focus(); }
+    }
+    else
+    {
+        pg_popup.focus();
+    }
+    return false;
+}
+</script>
+<?php } ?>]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/default/template/checkout/guest_shipping.tpl">
+		<operation>
+			<search position="before" error="log"><![CDATA[<table class="form">]]></search>
+			<add><![CDATA[<?php if ($this->config->get('myparcel_module_frontend')) { ?>
+<p>Kies <span onclick="return pakjegemak();" style="cursor: pointer; text-decoration: underline">hier</span> uw locatie indien u het pakket op een PostNL afleverlocatie wil laten bezorgen.</p>
+<?php
+    $username = $this->config->get('myparcel_module_username');
+    $api_key  = $this->config->get('myparcel_module_api_key');
+
+    $webshop = HTTPS_SERVER . '/catalog/view/theme/default/template/module/myparcel-passdata-opencart.html';//JURI::base().DS.'components'.DS.'com_myparcel'.DS. '/myparcel-passdata-virtuemart.html';
+    $uw_hash = hash_hmac('sha1', $username . 'MyParcel' . $webshop, $api_key);
+?>
+<script type="text/javascript">
+var pg_popup;
+function pakjegemak()
+{
+    if(!pg_popup || pg_popup.closed)
+    {
+        pg_popup = window.open(
+            '//www.myparcel.nl/pakjegemak-locatie?hash=<?php echo $uw_hash; ?>&webshop=<?php echo urlencode($webshop); ?>&user=<?php echo $username; ?>',
+            'myparcel-pakjegemak',
+            'width=980,height=680,dependent,resizable,scrollbars'
+        );
+        if(window.focus) { pg_popup.focus(); }
+    }
+    else
+    {
+        pg_popup.focus();
+    }
+    return false;
+}
+</script>
+<?php } ?>]]></add>
+		</operation>
+	</file>
+
+	<file path="catalog/controller/module/d_quickcheckout.php">
+		<ignoreif><![CDATA[// a_vqmod_d_quickcheckout.xml]]></ignoreif>
+		<operation>
+			<search><![CDATA[$this->document->addScript('catalog/view/javascript/d_quickcheckout/compress/d_quickcheckout.min.js');]]></search>
+			<add position="after"><![CDATA[$this->document->addScript('catalog/view/javascript/myparcel/myparcel_frontend.js');]]></add>
+		</operation>
+	</file>
+
+	<!-- COMPATIBILITY FOR QUICKCHECKOUT (NOT AjaxQuickCheckout) -->
+	<file path="catalog/controller/quickcheckout/checkout.php">
+		<operation>
+			<search><![CDATA[public function index() {]]></search>
+			<add position="after"><![CDATA[$this->document->addScript('catalog/view/javascript/myparcel/myparcel_frontend.js');]]></add>
+		</operation>
+	</file>
+	<!---->
+	<file path="catalog/view/theme/*/template/common/header.tpl">
+		<ignoreif><![CDATA[// a_vqmod_d_quickcheckout.xml]]></ignoreif>
+		<operation>
+			<search><![CDATA[</head>]]></search>
+			<add position="before"><![CDATA[<?php
+global $config;
+if ($config->get('myparcel_module_frontend')) {
+$username = $config->get('myparcel_module_username');
+$api_key = $config->get('myparcel_module_api_key');
+$webshop = HTTPS_SERVER . 'catalog/view/theme/default/template/module/myparcel-passdata-opencart.html';
+$uw_hash = hash_hmac('sha1', $username . 'MyParcel' . $webshop, $api_key);
+$myparcel_url = '//www.myparcel.nl/pakjegemak-locatie?hash=' . $uw_hash . '&webshop=' . urlencode($webshop) . '&user=' . $username;
+echo '<script> var MYPARCEL_PAKJEGEMAK_URL = "' . $myparcel_url . '"</script>';
+}else{
+echo '<script> var MYPARCEL_PAKJEGEMAK_URL = 0;</script>';
+}
+?>]]></add>
+		</operation>
+	</file>
+
+	<file path="catalog/view/theme/*/template/journal2/checkout/address_form.tpl">
+		<operation>
+			<search><![CDATA[<?php if ($name): ?>]]></search>
+			<add position="before"><![CDATA[
+	<?php if ($type == 'shipping') : ?>
+	<?php
+	global $config;
+	if ($config->get('myparcel_module_frontend')) { ?>
+		<p>Kies <span onclick="return pakjegemak();" style="cursor: pointer; text-decoration: underline">hier</span> uw locatie indien u het pakket op een PostNL afleverlocatie wil laten bezorgen.</p>
+		<br/>
+	<?php
+    $username = $config->get('myparcel_module_username');
+    $api_key  = $config->get('myparcel_module_api_key');
+
+    $webshop = HTTPS_SERVER . 'catalog/view/theme/default/template/module/myparcel-passdata-opencart.html';//JURI::base().DS.'components'.DS.'com_myparcel'.DS. '/myparcel-passdata-virtuemart.html';
+    $uw_hash = hash_hmac('sha1', $username . 'MyParcel' . $webshop, $api_key);
+	?>
+	<script type="text/javascript">
+	var pg_popup;
+	function pakjegemak()
+	{
+		if(!pg_popup || pg_popup.closed)
+		{
+			pg_popup = window.open(
+				'//www.myparcel.nl/pakjegemak-locatie?hash=<?php echo $uw_hash; ?>&webshop=<?php echo urlencode($webshop); ?>&user=<?php echo $username; ?>',
+				'myparcel-pakjegemak',
+				'width=980,height=680,dependent,resizable,scrollbars'
+			);
+			if(window.focus) { pg_popup.focus(); }
+		}
+		else
+		{
+			pg_popup.focus();
+		}
+		return false;
+	}
+	</script>
+<?php } ?>
+<?php endif; ?>
+]]></add>
+		</operation>
+	</file>
+
+	<file path="catalog/controller/module/quickcheckout.php">
+		<ignoreif><![CDATA[// a_vqmod_d_quickcheckout.xml]]></ignoreif>
+		<operation>
+			<search><![CDATA[$this->document->addStyle('catalog/view/theme/default/stylesheet/quickcheckout/icon/styles.css');]]></search>
+			<add position="after"><![CDATA[$this->document->addScript('catalog/view/javascript/myparcel/myparcel_frontend.js');]]></add>
+		</operation>
+	</file>
+</modification>
