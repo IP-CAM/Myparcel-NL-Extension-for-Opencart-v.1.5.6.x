@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <modification>
 	<id>VQMOD MYPARCEL</id>
-	<version>1.4.x and 1.5.x</version>
+	<version>1.4.5</version>
 	<vqmver required="true">2.4.0</vqmver>
 	<author>balticode.com</author>
 
@@ -146,7 +146,7 @@ if ($check_if_table->num_rows < 1)
     $username = $this->config->get('myparcel_module_username');
     $api_key  = $this->config->get('myparcel_module_api_key');
 
-    $webshop = HTTP_SERVER . '/catalog/view/theme/default/template/module/myparcel-passdata-opencart.html';//JURI::base().DS.'components'.DS.'com_myparcel'.DS. '/myparcel-passdata-virtuemart.html';
+    $webshop = HTTPS_SERVER . '/catalog/view/theme/default/template/module/myparcel-passdata-opencart.html';//JURI::base().DS.'components'.DS.'com_myparcel'.DS. '/myparcel-passdata-virtuemart.html';
     $uw_hash = hash_hmac('sha1', $username . 'MyParcel' . $webshop, $api_key);
 ?>
 <script type="text/javascript">
@@ -181,7 +181,7 @@ function pakjegemak()
     $username = $this->config->get('myparcel_module_username');
     $api_key  = $this->config->get('myparcel_module_api_key');
 
-    $webshop = HTTP_SERVER . '/catalog/view/theme/default/template/module/myparcel-passdata-opencart.html';//JURI::base().DS.'components'.DS.'com_myparcel'.DS. '/myparcel-passdata-virtuemart.html';
+    $webshop = HTTPS_SERVER . '/catalog/view/theme/default/template/module/myparcel-passdata-opencart.html';//JURI::base().DS.'components'.DS.'com_myparcel'.DS. '/myparcel-passdata-virtuemart.html';
     $uw_hash = hash_hmac('sha1', $username . 'MyParcel' . $webshop, $api_key);
 ?>
 <script type="text/javascript">
@@ -207,25 +207,33 @@ function pakjegemak()
 <?php } ?>]]></add>
 		</operation>
 	</file>
-
-	<file path="catalog/controller/module/d_quickcheckout.php">
+	
+	<file name="catalog/controller/module/d_quickcheckout.php">
 		<ignoreif><![CDATA[// a_vqmod_d_quickcheckout.xml]]></ignoreif>
 		<operation>
-			<search><![CDATA[$this->document->addScript('catalog/view/javascript/d_quickcheckout/compress/d_quickcheckout.min.js');]]></search>
-			<add position="after"><![CDATA[$this->document->addScript('catalog/view/javascript/myparcel/myparcel_frontend.js');]]></add>
+			<search position="after"><![CDATA[$this->document->addScript('catalog/view/javascript/d_quickcheckout/compress/d_quickcheckout.min.js');]]></search>
+			<add><![CDATA[$this->document->addScript('catalog/view/javascript/myparcel/myparcel_frontend.js');]]></add>
 		</operation>
 	</file>
 
-	<file path="catalog/view/theme/*/template/common/header.tpl">
+	<file name="catalog/controller/module/d_quickcheckout.php">
 		<ignoreif><![CDATA[// a_vqmod_d_quickcheckout.xml]]></ignoreif>
 		<operation>
-			<search><![CDATA[</head>]]></search>
-			<add position="before"><![CDATA[<?php
+			<search position="before"><![CDATA[$this->data['json_config'] = json_encode($this->setting);]]></search>
+			<add><![CDATA[$this->document->addScript('catalog/view/javascript/myparcel/myparcel_frontend.js');]]></add>
+		</operation>
+	</file>
+	
+	<file name="catalog/view/theme/*/template/common/header.tpl">
+		<ignoreif><![CDATA[// a_vqmod_d_quickcheckout.xml]]></ignoreif>
+		<operation>
+			<search position="after"><![CDATA[</head>]]></search>
+			<add><![CDATA[<?php
 global $config;
 if ($config->get('myparcel_module_frontend')) {
 $username = $config->get('myparcel_module_username');
 $api_key = $config->get('myparcel_module_api_key');
-$webshop = HTTP_SERVER . 'catalog/view/theme/default/template/module/myparcel-passdata-opencart.html';
+$webshop = $this->config->get('config_url') . 'catalog/view/theme/default/template/module/myparcel-passdata-opencart.html';
 $uw_hash = hash_hmac('sha1', $username . 'MyParcel' . $webshop, $api_key);
 $myparcel_url = '//www.myparcel.nl/pakjegemak-locatie?hash=' . $uw_hash . '&webshop=' . urlencode($webshop) . '&user=' . $username;
 echo '<script> var MYPARCEL_PAKJEGEMAK_URL = "' . $myparcel_url . '"</script>';
@@ -236,10 +244,10 @@ echo '<script> var MYPARCEL_PAKJEGEMAK_URL = 0;</script>';
 		</operation>
 	</file>
 
-	<file path="catalog/view/theme/*/template/journal2/checkout/address_form.tpl">
+	<file name="catalog/view/theme/*/template/journal2/checkout/address_form.tpl">
 		<operation>
-			<search><![CDATA[<?php if ($name): ?>]]></search>
-			<add position="before"><![CDATA[
+			<search position="before"><![CDATA[<?php if ($name): ?>]]></search>
+			<add><![CDATA[
 	<?php if ($type == 'shipping') : ?>
 	<?php
 	global $config;
@@ -250,7 +258,7 @@ echo '<script> var MYPARCEL_PAKJEGEMAK_URL = 0;</script>';
     $username = $config->get('myparcel_module_username');
     $api_key  = $config->get('myparcel_module_api_key');
 
-    $webshop = HTTP_SERVER . 'catalog/view/theme/default/template/module/myparcel-passdata-opencart.html';//JURI::base().DS.'components'.DS.'com_myparcel'.DS. '/myparcel-passdata-virtuemart.html';
+    $webshop = $this->config->get('config_url') . 'catalog/view/theme/default/template/module/myparcel-passdata-opencart.html';//JURI::base().DS.'components'.DS.'com_myparcel'.DS. '/myparcel-passdata-virtuemart.html';
     $uw_hash = hash_hmac('sha1', $username . 'MyParcel' . $webshop, $api_key);
 	?>
 	<script type="text/javascript">
@@ -279,4 +287,11 @@ echo '<script> var MYPARCEL_PAKJEGEMAK_URL = 0;</script>';
 		</operation>
 	</file>
 
+	<file name="catalog/controller/module/quickcheckout.php">
+		<ignoreif><![CDATA[// a_vqmod_d_quickcheckout.xml]]></ignoreif>
+		<operation>
+			<search position="after"><![CDATA[$this->document->addStyle('catalog/view/theme/default/stylesheet/quickcheckout/icon/styles.css');]]></search>
+			<add><![CDATA[$this->document->addScript('catalog/view/javascript/myparcel/myparcel_frontend.js');]]></add>
+		</operation>
+	</file>
 </modification>

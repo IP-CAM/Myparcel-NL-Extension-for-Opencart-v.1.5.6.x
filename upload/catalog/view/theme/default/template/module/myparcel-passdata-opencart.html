@@ -130,25 +130,27 @@
                     try {
                         var field_company = formulier.getElementById("shipping_address_company");
                         field_company.value   = shopname;
-                        fireEvent(field_company, 'change');
                     } catch (err) {}
 
                     try {
                         var field_postcode = formulier.getElementById("shipping_address_postcode");
                         field_postcode.value   = postalCodeNum + postalCodeAlpha;
-                        fireEvent(field_postcode, 'change');
                     } catch (err) {}
 
                     try {
                         var field_address1 = formulier.getElementById("shipping_address_address_1");
-                        field_address1.value = street + ' ' + houseNr + ' ' + houseNrAdd;
-                        fireEvent(field_address1, 'change');
+                        var field_house_number = formulier.getElementById("shipping_address_house_number");
+						if (field_house_number) {
+							field_address1.value = street;	
+							field_house_number.value = houseNr + ' ' + houseNrAdd;
+						} else {
+							field_address1.value = street + ' ' + houseNr + ' ' + houseNrAdd;
+						}
                     } catch (err) {}
 
                     try {
                         var field_city = formulier.getElementById("shipping_address_city");
                         field_city.value = city;
-                        fireEvent(field_city, 'change');
                     } catch (err) {}
 
                     try {
@@ -156,19 +158,14 @@
                         country_select.value = 150;
 
                         for (var i = 0; i < country_select.options.length; i++) {
-                            if (country_select.options[i].text === 'Netherlands') {
+                            if (country_select.options[i].value == 150) {
                                 country_select.selectedIndex = i;
                                 break;
                             }
                         }
                     } catch (err) {}
 
-                    try{
-                        fireEvent(country_select, 'change');
-                    }catch(ex){
-                        // Possbile IE 11
-                        //formulier.getElementById('add_address').submit();
-                    }
+
                 }
 
 

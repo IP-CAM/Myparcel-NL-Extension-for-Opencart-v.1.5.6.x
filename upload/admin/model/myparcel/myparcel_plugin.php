@@ -452,7 +452,6 @@ if(isset($_GET['action']))
 
                     $qupdate = "UPDATE " . DB_PREFIX . "orders_myparcel SET tnt_status='" . trim($row[2]) . "', tnt_updated_on='" . date('Y-m-d H:i:s') . "', tnt_final='" . (int)$row[1] . "' WHERE consignment_id = '" . $row[0] . "'";
                     $db->query($qupdate);
-                    $db->query();
 
                     /* tep_db_perform('orders_myparcel', array(
                          'tnt_status'     => trim($row[2]),
@@ -576,6 +575,11 @@ if(isset($_GET['action']))
                 // End Check if SimpleCheckout is installed
                 $pg_address = isPgAddress($gkcompany, $street, $gkzip, $gkcity);
             }
+			
+			// @Since version 1.4.4
+			if (empty($street['house_number'])) {
+				$street['house_number'] = $gkaddr2;
+			}
 			
             if ($pg_address) {
                 $street['number_addition'] = '';
@@ -829,6 +833,11 @@ SELECT countries_iso_code_2 AS country_code
 					$pg_address = isPgAddress($gkcompany, $street, $gkzip, $gkcity);
 				}
 
+				// Changes for version 1.4.4
+				if (empty($street['house_number'])) {
+					$street['house_number'] = $gkaddr2;
+				}
+				
                 if ($pg_address) {
                     $street['number_addition'] = '';
                 }
