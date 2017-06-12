@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>VQMOD MYPARCEL NL</id>
+	<version>1.0.1</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>MyParcel NL</author>
+
+    <!-- checked with compatible with Opencart 1x-->
+    <!-- yes is compatible, no is no compatible -->
+    <!-- ****************** ORDER_LIST.TPL ******************* -->
+    <!-- ***************************************************** -->
+	<file name="admin/view/template/sale/order_list.tpl">
+		<operation><!-- yes -->
+            <search regex="true"><![CDATA[/<td(.*)\$column_action(.*)<\/td>/]]></search>
+            <add><![CDATA[
+                 <td><?php echo "Ship To"; ?></td>
+
+				<td class="text-right"><?php echo $column_header_myparcel ?></td>
+
+				<td$1$column_action$2</td>
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[<td align="right"><a onclick="filter();" class="button"><?php echo $button_filter; ?></a></td>]]></search>
+            <add><![CDATA[
+                <td></td>
+                <td></td>
+            ]]></add>
+        </operation>
+        <operation>
+            <search regex="true"><![CDATA[/<td(.*)\$order\['date_modified'](.*)<\/td>/]]></search>
+            <add><![CDATA[
+                <td$1$order['date_modified']$2</td>
+
+                <!-- ~~~ Tap.Nguyen ~~~ -->
+                <td class="shipping_address" class="text-left">
+                    <div class="oc_shipment_options">
+                      <?php echo $order['mp_packet_type']; ?>
+                      <div class="oc_shipment_options_form" style="display: none;">
+                        <?php echo $order['ship_to_myparcel']; ?>
+                      </div>
+                    </div>
+                </td>
+                <!-- Tap.Nguyen -->
+
+				<td class="text-right" id="column-myparcel-order-<?php echo $order['order_id'] ?>"><?php echo $order['column_myparcel'] ?></td>
+            ]]></add>
+        </operation>
+        <operation><!-- no -->
+            <search regex="true"><![CDATA[/<td(.*)\$order\['status'](.*)<\/td>/]]></search>
+            <add><![CDATA[
+				<td id="column-status-order-<?php echo $order['order_id'] ?>"$1$order['status']$2</td>
+            ]]></add>
+        </operation>
+
+        <operation><!-- yes -->
+            <search position="after"><![CDATA[<div id="content">]]></search>
+            <add><![CDATA[
+                <?php echo $myparcel_popup_modal ?>
+            ]]></add>
+        </operation>
+
+        <operation><!-- no -->
+            <search regex="true"><![CDATA[/<a(.*)\$button_invoice(.*)<\/a>/]]></search>
+            <add><![CDATA[
+                <?php echo $print_batch; ?>
+                <?php echo $export_batch; ?>
+                <?php echo $export_print_batch; ?>
+                <a$1$button_invoice$2</a>
+            ]]></add>
+        </operation>
+	</file>
+
+    <!-- ****************** ORDER_INFO.TPL ******************* -->
+    <!-- ***************************************************** -->
+    <file name="admin/view/template/sale/order_info.tpl"><!-- checked -->
+        <operation><!-- yes -->
+            <search position="after"><![CDATA[<?php if ($shipping_zone_code) { ?>]]></search>
+            <add><![CDATA[
+
+                    <?php /* -- MyParcel Hooks -- */ ?>
+
+                    <?php echo $myparcel_actions ?>
+
+                    <!-- ~~~ Tap.Nguyen ~~~ -->
+                    <tr>
+                        <?php echo $tracktrace; ?>
+                    </tr>
+
+                    <tr>
+                        <?php echo $shipment_sumary; ?>
+                    </tr>
+
+                    <tr>
+                        <?php echo $checkout_delivery_options; ?>
+                    </tr>
+
+                    <tr>
+                        <?php echo $checkout_delivery_details ?>
+                    </tr>
+                    <!-- Tap.Nguyen -->
+
+                    <?php echo $myparcel_popup_modal ?>
+
+            ]]>
+            </add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[<?php echo $totals['title']; ?>]]></search>
+            <add><![CDATA[<?php echo html_entity_decode($totals['title']); ?>]]></add>
+        </operation>
+    </file>
+
+    <!-- ****************** HEADER.TPL ******************* -->
+    <!-- ***************************************************** -->
+    <file name="admin/view/template/common/header.tpl"><!-- checked -->
+        <operation><!-- yes -->
+            <search position="before"><![CDATA[</head>]]></search>
+            <add><![CDATA[
+                <?php echo $myparcel_order_header; ?>
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <!-- ****** ORDER CONTROLLER ADMIN/SALE/ORDER.PHP ****** -->
+    <!-- *************************************************** -->
+
+    <file name="admin/controller/sale/order.php"><!-- checked -->
+        <!-- 1X -->
+        <operation><!-- yes -->
+            <search position="after"><![CDATA[
+            public function index() {
+            ]]></search>
+            <add><![CDATA[
+                $this->load->model('myparcelnl/helper');
+				$this->document->addStyle($this->model_myparcelnl_helper->getCssUrl() . 'order.css');
+				$this->document->addScript($this->model_myparcelnl_helper->getJsUrl() . 'order.js');
+            ]]></add>
+        </operation>
+
+        <operation><!-- yes -->
+            <search position="after"><![CDATA[
+             public function info() {
+            ]]></search>
+            <add><![CDATA[
+                $this->load->model('myparcelnl/helper');
+				$this->document->addStyle($this->model_myparcelnl_helper->getCssUrl() . 'order.css');
+				$this->document->addScript($this->model_myparcelnl_helper->getJsUrl() . 'order.js');
+            ]]></add>
+        </operation>
+
+        <operation><!-- yes -->
+            <search position="after"><![CDATA[
+            public function getForm() {
+            ]]></search>
+            <add><![CDATA[
+                $this->load->model('myparcelnl/helper');
+				$this->document->addStyle($this->model_myparcelnl_helper->getCssUrl() . 'order.css');
+				$this->document->addScript($this->model_myparcelnl_helper->getJsUrl() . 'order.js');
+            ]]></add>
+        </operation>
+
+        <operation><!-- yes -->
+            <search position="after"><![CDATA[protected function getList() {]]></search>
+            <add><![CDATA[
+                $this->load->model('myparcelnl/helper');
+                $this->data['print_batch'] = $this->model_myparcelnl_helper->getContent('print_batch', array());
+                $this->data['export_batch'] = $this->model_myparcelnl_helper->getContent('export_batch', array());
+                $this->data['export_print_batch'] = $this->model_myparcelnl_helper->getContent('export_print_batch', array());
+            ]]></add>
+        </operation>
+
+        <operation><!-- yes -->
+            <search regex="true"><![CDATA[/'customer'(.*)=> \$result\['customer'],/]]></search>
+            <add><![CDATA[
+                'customer'$1=> $result['customer'],
+				'column_myparcel' 			=> $this->model_myparcelnl_helper->getContent('column_myparcel', array('order_id' => $result['order_id'])),
+				'ship_to_myparcel'       => $this->model_myparcelnl_helper->getContent('ship_to_myparcel', array('order_id' => $result['order_id'])),
+                'mp_packet_type' => $this->model_myparcelnl_helper->getContent('myparcel_packet_type', array('order_id' => $result['order_id'])),
+            ]]></add>
+        </operation>
+
+        <operation><!-- no -->
+            <search regex="true"><![CDATA[/\$this->data\['column_action'](.*);/]]></search>
+            <add><![CDATA[
+                $this->data['column_action']$1;
+				$this->data['column_header_myparcel'] = $this->model_myparcelnl_helper->getContent('column_header_myparcel');
+				$this->data['myparcel_popup_modal'] = $this->model_myparcelnl_helper->getContent('myparcel_popup_modal');
+            ]]></add>
+        </operation>
+        <!--
+            Add the contents from controller in order to render in order_info.tpl
+        -->
+        <operation><!-- no -->
+            <search position="after"><![CDATA[$this->data['shipping_country'] = $order_info['shipping_country'];]]></search>
+            <add><![CDATA[
+                $this->data['tracktrace'] = $this->model_myparcelnl_helper->getContent('myparcel_tracktrace', array('order_id' => $this->request->get['order_id']));
+                $this->data['shipment_sumary'] = $this->model_myparcelnl_helper->getContent('myparcel_shipment_summary', array('order_id' => $this->request->get['order_id']));
+                $this->data['myparcel_actions'] = $this->model_myparcelnl_helper->getContent('order_details_myparcel_actions', array('order_id' => $order_info['order_id']));
+                $this->data['checkout_delivery_options'] = $this->model_myparcelnl_helper->getContent('myparcel_admin_checkout_delivery_options', array('order_id' => $order_info['order_id']));
+                $this->data['checkout_delivery_details'] = $this->model_myparcelnl_helper->getContent('myparcel_admin_checkout_delivery_details', array('order_id' => $order_info['order_id']));
+                $this->data['myparcel_popup_modal'] = $this->model_myparcelnl_helper->getContent('myparcel_popup_modal');
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="after"><![CDATA[$results = $this->model_sale_order->getOrders($data);]]></search>
+            <add><![CDATA[
+                MyParcel()->shipment->shipment_helper->syncShipmentForOrders($results);
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ****** ADMIN COMMON HEADER CONTROLLER ADMIN/CONTROLLER/COMMON/HEADER.PHP ****** -->
+    <!-- ************************************************************************* -->
+
+    <file name="admin/controller/common/header.php"><!-- checked -->
+        <operation><!-- yes -->
+            <search position="after"><![CDATA[
+            protected function index() {
+            ]]></search>
+            <add><![CDATA[
+                /* MyParcel Ocmod Start */
+                    $this->load->model('myparcelnl/helper');
+                    $this->data['myparcel_order_header'] = $this->model_myparcelnl_helper->getContent('myparcel_order_header');
+
+                    $this->document->addStyle($this->model_myparcelnl_helper->getCssUrl() . 'magnific-popup.css');
+				    $this->document->addScript($this->model_myparcelnl_helper->getJsUrl() . 'magnific-popup.min.js');
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ****** CATALOG COMMON HEADER CONTROLLER CATALOG/CONTROLLER/COMMON/HEADER.PHP ****** -->
+    <!-- ************************************************************************* -->
+
+    <file name="catalog/controller/common/header.php"><!-- checked -->
+        <operation><!-- yes -->
+            <search position="after"><![CDATA[
+            protected function index() {
+            ]]></search>
+            <add><![CDATA[
+                /* MyParcel Ocmod Start */
+                $this->load->model('myparcelnl/helper');
+                $this->model_myparcelnl_helper->addCompatibleScript('myparcel_global', $this->document);
+                $this->document->addStyle($this->model_myparcelnl_helper->getCssUrl() . 'myparcel_global.css');
+                $this->data['myparcel_delivery_checkout_header'] = $this->model_myparcelnl_helper->getContent('iframe_delivery_checkout_header');
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="system/library/url.php"><!-- checked -->
+        <operation><!-- yes -->
+            <search position="replace"><![CDATA[$url .= str_replace('&', '&amp;', '&' . ltrim($args, '&'));]]></search>
+            <add><![CDATA[
+                if (is_array($args)) {
+				    $url .= '&amp;' . http_build_query($args);
+                } else {
+                    $url .= str_replace('&', '&amp;', '&' . ltrim($args, '&'));
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ****** Send info tracktrace via email ****** -->
+    <!-- *************************************************** -->
+    <file name="catalog/model/checkout/order.php">
+        <operation><!-- no -->
+            <search position="before"><![CDATA[$message .= $language->get('text_update_footer');]]></search>
+            <add><![CDATA[
+                $this->load->model('myparcelnl/helper');
+                $tracktrace = $this->model_myparcelnl_helper->getContent('myparcel_email_tracktrace', array('order_id' => $order_id));
+                ?>
+                <p><?php if(!empty($tracktrace)){$message .= $tracktrace['text'].' '.implode(', ', $tracktrace['code']);}  ?></p>
+                <?php
+                $message .= "\n\n";
+            ]]></add>
+        </operation>
+    </file>
+    <file name="admin/model/sale/order.php">
+        <operation>
+            <search position="before"><![CDATA[$message .= $language->get('text_footer');]]></search>
+            <add><![CDATA[
+                $this->load->model('myparcelnl/helper');
+                $tracktrace = $this->model_myparcelnl_helper->getContent('myparcel_email_tracktrace', array('order_id' => $order_id));
+                ?>
+                <p><?php if(!empty($tracktrace)){$message .= $tracktrace['text'].' '.implode(', ', $tracktrace['code']);}  ?></p>
+                <?php
+                $message .= "\n\n";
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[$mail->setText(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));]]></search>
+            <add><![CDATA[
+                $mail->setHtml(nl2br($message));
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <!-- ________ CATALOG\VIEW\THEME\*\TEMPLATE\ACCOUNT\ORDER_LIST.TPL ________ -->
+    <!-- ______________________ VIEW ACCOUNT ORDER_LIST _______________________ -->
+    <!-- ______________________________________________________________________ -->
+    <file name="catalog/view/theme/*/template/account/order_list.tpl"><!-- checked -->
+        <operation><!-- no -->
+            <search position="after"><![CDATA[<?php echo $order['status']; ?>]]></search>
+            <add><![CDATA[<div><?php echo $order['tracktrace_myaccount']; ?></div>]]></add>
+        </operation>
+    </file>
+
+    <!-- ________ CATALOG\VIEW\THEME\*\TEMPLATE\ACCOUNT\ORDER_INFO.TPL ________ -->
+    <!-- ______________________ VIEW ACCOUNT ORDER_INFO _______________________ -->
+    <!-- ______________________________________________________________________ -->
+    <file name="catalog/view/theme/*/template/account/order_info.tpl"><!-- checked -->
+        <operation>
+            <search position="before"><![CDATA[<?php echo $footer; ?> ]]></search>
+            <add><![CDATA[<?php echo $myparcel_order_header; ?>]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ CATALOG\CONTROLLER\ACCOUNT\ORDER.PHP ________________ -->
+    <!-- ______________________ ACCOUNT ORDER CONTROLLER ______________________ -->
+    <!-- ______________________________________________________________________ -->
+    <file name="catalog/controller/account/order.php">
+        <operation>
+            <search position="after"><![CDATA[$this->data['orders'][] = array(]]></search>
+            <add><![CDATA[
+                'tracktrace_myaccount'     => $this->model_myparcelnl_helper->getContent('tracktrace_myaccount', array('order_id' => $result['order_id'])),
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[
+                $this->load->model('myparcelnl/helper');
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[public function info() {]]></search>
+            <add position="after"><![CDATA[
+                $this->load->model('myparcelnl/helper');
+                $this->data['myparcel_order_header'] = $this->model_myparcelnl_helper->getContent('myparcel_order_header');
+				$this->document->addScript($this->model_myparcelnl_helper->getJsUrl() . 'order.js');
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ SHIPPING.PHP ________________ -->
+    <!-- ________________ SHIPPING TOTAL ______________ -->
+    <!-- _____________________________________________________ -->
+    <file name="catalog/model/total/shipping.php">
+        <operation>
+            <search position="after"><![CDATA[public function getTotal(&$total_data, &$total, &$taxes) {]]></search>
+            <add><![CDATA[
+                 /* MyParcel Ocmod Start */
+                 if (!class_exists('MyParcel')) {
+					require_once DIR_SYSTEM . 'myparcelnl/class_myparcel.php';
+					MyParcel($this->registry);
+				}
+
+                if (function_exists('MyParcel') && MyParcel()->shipment->checkout->appliedByParcel($total_data)) {
+                    return $total;
+                }
+                /* MyParcel Ocmod End */
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ admin/view/template/sale/order_form.tpl ________________ -->
+    <!-- _______________________ Admin Edit Order Template _______________________ -->
+    <!-- _________________________________________________________________________ -->
+    <file name="admin/view/template/sale/order_form.tpl">
+        <operation>
+            <search position="replace"><![CDATA[value="<?php echo $order_total['title']; ?>"]]></search>
+            <add><![CDATA[value="<?php echo htmlentities($order_total['title']); ?>"]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[if ($(this).attr('id') == 'button-product') {]]></search>
+            <add><![CDATA[data += '#order_id, ';]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[<div id="tab-customer" class="vtabs-content">]]></search>
+            <add><![CDATA[ <input id="order_id" name="order_id" type="hidden" value="<?php echo $order_id ?>" />]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[value="' + total['title'] + '"]]></search>
+            <add><![CDATA[value="' + htmlEntities(total['title']) + '"]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[<?php echo $order_total['title']; ?>]]></search>
+            <add><![CDATA[<?php echo html_entity_decode($order_total['title']); ?>]]></add>
+        </operation>
+    </file>
+
+    <!-- ________________ admin/view/template/sale/order_form.tpl ________________ -->
+    <!-- _______________________ Admin Edit Order Template _______________________ -->
+    <!-- _________________________________________________________________________ -->
+    <file name="admin/view/template/common/header.tpl">
+        <operation>
+            <search position="after"><![CDATA[<li><a href="<?php echo $feed; ?>"><?php echo $text_feed; ?></a></li>]]></search>
+            <add><![CDATA[
+            <?php
+            /* MyParcel Ocmod Start */
+                 if (!class_exists('MyParcel')) {
+                    require_once DIR_SYSTEM . 'myparcelnl/class_myparcel.php';
+                    MyParcel($this->registry);
+                }
+                if (MyParcel()->helper->isModuleExist('myparcelnl')) {
+                    $route = 'module/myparcelnl';
+            ?>
+                    <li>
+                        <a href="<?php echo $this->url->link($route, 'token=' . $this->session->data['token'], 'SSL'); ?>"><?php echo MyParcel()->lang->get('text_myparcel_menu_title'); ?></a>
+                    </li>
+            <?php
+                }
+                /* MyParcel Ocmod End */
+            ?>
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[</head>]]></search>
+            <add><![CDATA[
+                <?php if (!version_compare(VERSION, '2.0.0.0', '>=')) : ?>
+                    <script>var is_opencart1 = true;</script>
+                <?php endif; ?>
+            ]]></add>
+        </operation>
+    </file>
+</modification>
