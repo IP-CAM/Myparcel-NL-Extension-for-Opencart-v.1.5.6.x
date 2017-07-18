@@ -300,6 +300,11 @@ var MYPARCEL_CHECKOUT = MYPARCEL_CHECKOUT || {};
         $('#myparcel-iframe').attr('height', 300);
     };
 
+    MYPARCEL_CHECKOUT.eventError = function()
+    {
+        $('#delivery-options-wrapper').hide();
+    };
+
     MYPARCEL_CHECKOUT.activateIframe = function() {
 
         // If delivery iFrame is not enabled then ignore this function

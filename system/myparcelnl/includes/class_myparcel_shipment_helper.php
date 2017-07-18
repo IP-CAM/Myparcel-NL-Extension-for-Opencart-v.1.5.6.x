@@ -45,7 +45,6 @@ class MyParcel_Shipment_Helper
             'phone'			=> !empty($connect_phone) ? $order['telephone'] : '',
         );
 
-
         if ( $order['shipping_iso_code_2'] == 'NL' ) {
             /** @var MyParcel_Helper $helper **/
             $helper = MyParcel()->helper;
@@ -62,6 +61,7 @@ class MyParcel_Shipment_Helper
                 'postal_code'				=> $order['shipping_postcode'],
                 'street'					=> $order['shipping_address_1'],
                 'street_additional_info'	=> $order['shipping_address_2'],
+                'region'                    => isset($order['shipping_zone']) ? $order['shipping_zone'] : ''
             );
         }
 
@@ -712,7 +712,9 @@ class MyParcel_Shipment_Helper
 
                 if (isset($options['insured'])) {
 
-                    if (!empty(intval($options['insured']))) {
+                    $insured = intval($options['insured']);
+
+                    if (!empty($insured)) {
 
                         $amount_select_box = isset($options['insured_amount_selectbox']) ? intval($options['insured_amount_selectbox']) : 0;
 

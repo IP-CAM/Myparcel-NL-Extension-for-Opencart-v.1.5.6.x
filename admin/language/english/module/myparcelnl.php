@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']       = 'Myparcel NL';
+$_['heading_title']       = 'Myparcel NL v1.0.2';
 
 // Text
 $_['text_module']         = 'Modules';

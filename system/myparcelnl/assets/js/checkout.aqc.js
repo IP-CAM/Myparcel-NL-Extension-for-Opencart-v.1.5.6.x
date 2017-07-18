@@ -237,6 +237,11 @@ var MYPARCEL_CHECKOUT = MYPARCEL_CHECKOUT || {};
         //$('#button-shipping-address').prop('disabled', false);
     };
 
+    MYPARCEL_CHECKOUT.eventError = function()
+    {
+        $('#delivery-options-wrapper').hide();
+    };
+
     MYPARCEL_CHECKOUT.activateIframe = function() {
         // If delivery iFrame is not enabled then ignore this function
         if (!MYPARCEL_CHECKOUT.isActive()) {

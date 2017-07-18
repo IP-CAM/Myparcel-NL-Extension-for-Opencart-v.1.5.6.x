@@ -230,7 +230,7 @@ class MyParcel_Shipment_Checkout
                 $option = 'default';
             }
 
-            $option_enabled = (isset($checkout_settings[$option.'_enabled']) && !empty(intval($checkout_settings[$option.'_enabled']) )) ? true : false;
+            $option_enabled = (empty($checkout_settings[$option.'_enabled'])) ? true : false;
             if ($option_enabled) {
                 if (!empty($checkout_settings[$option . '_fee'])) {
                     $fee = $checkout_settings[$option . '_fee'];
@@ -552,8 +552,8 @@ class MyParcel_Shipment_Checkout
                 $recipient_only = 1; // Recipient_only is required for pickup and pickup express
 
             } else {
-                $signed = (!empty($data['signed'] && ($data['signed'] == 'on' || $data['signed'] == 1)) ? 1 : 0);
-                $recipient_only = ((!empty($data['recipient_only'] && ($data['recipient_only'] == 'on' || $data['recipient_only'] == 1)) || in_array($delivery_type, array(self::DELIVERY_TYPE_MORNING, self::DELIVERY_TYPE_NIGHT))) ? 1 : 0);
+                $signed = (!empty($data['signed']) && ($data['signed'] == 'on' || $data['signed'] == 1) ? 1 : 0);
+                $recipient_only = ((!empty($data['recipient_only']) && ($data['recipient_only'] == 'on' || $data['recipient_only'] == 1)) || in_array($delivery_type, array(self::DELIVERY_TYPE_MORNING, self::DELIVERY_TYPE_NIGHT)) ? 1 : 0);
             }
 
             // Save current prices into order

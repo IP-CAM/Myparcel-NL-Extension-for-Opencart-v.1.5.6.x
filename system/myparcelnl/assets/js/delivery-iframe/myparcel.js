@@ -207,6 +207,9 @@
           deliverydays_window: settings.deliverydays_window != null ? settings.deliverydays_window : void 0,
           exclude_delivery_type: settings.exclude_delivery_type != null ? settings.exclude_delivery_type : void 0
         },
+        error: function() {
+          window.parent.window.MYPARCEL_CHECKOUT.eventError();
+        },
         success: renderPage
       };
       return jquery.ajax(options);
