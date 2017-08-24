@@ -20,7 +20,7 @@ class MyParcel_View extends MyParcel_View_Core
         $lang = $registry->get('language');
         $lang->load(MyParcel()->getMyparcelModulePath());
         $session = $registry->get('session');
-        $url = $registry->get('url');
+        $url = MyParcel()->url;
         $token = $session->data['token'];
 
         if (version_compare(VERSION, '2.0.0.0', '>=')) {
@@ -41,7 +41,7 @@ class MyParcel_View extends MyParcel_View_Core
         $lang = $registry->get('language');
         $lang->load(MyParcel()->getMyparcelModulePath());
         $session = $registry->get('session');
-        $url = $registry->get('url');
+        $url = MyParcel()->url;
         $token = $session->data['token'];
         $formAction = $url->link(MyParcel()->getMyparcelControllerPath('myparcelnl', 'exportBatch'), array('token' => $token));
         ob_start();
@@ -82,7 +82,7 @@ class MyParcel_View extends MyParcel_View_Core
         $lang->load(MyParcel()->getMyparcelModulePath());
 
         // Load other packages
-        $url = $registry->get('url');
+        $url = MyParcel()->url;
         $session = $registry->get('session');
         $helper = MyParcel()->helper;
 
@@ -196,7 +196,7 @@ class MyParcel_View extends MyParcel_View_Core
         $registry = MyParcel::$registry;
 
         // Load other packages
-        $url = $registry->get('url');
+        $url = MyParcel()->url;
         $session = $registry->get('session');
         $helper = MyParcel()->helper;
 

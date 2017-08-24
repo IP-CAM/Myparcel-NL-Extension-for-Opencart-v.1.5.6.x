@@ -230,7 +230,7 @@ class MyParcel_Shipment_Checkout
                 $option = 'default';
             }
 
-            $option_enabled = (empty($checkout_settings[$option.'_enabled'])) ? true : false;
+            $option_enabled = (!empty($checkout_settings[$option.'_enabled'])) ? true : false;
             if ($option_enabled) {
                 if (!empty($checkout_settings[$option . '_fee'])) {
                     $fee = $checkout_settings[$option . '_fee'];

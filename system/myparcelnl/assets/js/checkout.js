@@ -320,7 +320,7 @@ var MYPARCEL_CHECKOUT = MYPARCEL_CHECKOUT || {};
 
         iframeWindow = el.contentWindow;
 
-        $(el).load(function() {
+        $(el).on('load', function() {
             iframeWindow = this.contentWindow;
             iframeWindow.mypa = {};
             iframeWindow.mypa.settings = window.mypa.settings;

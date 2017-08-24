@@ -890,7 +890,11 @@ class MyParcel_Shipment_Helper
                         'value' => $value
                     );
 
-                    $product_option_value_info = $model_product->getProductOptionValue($product['product_id'], $option['product_option_value_id']);
+                    if(version_compare(VERSION, '2.0.0.0', '>=') && version_compare(VERSION, '2.2.0.0', '<')) {
+                        $product_option_value_info = $this->getProductOptionValue($product['product_id'], $option['product_option_value_id']);
+                    } else {
+                        $product_option_value_info = $model_product->getProductOptionValue($product['product_id'], $option['product_option_value_id']);
+                    }
                     if ($product_option_value_info) {
                         if ($product_option_value_info['weight_prefix'] == '+') {
                             $option_weight += $product_option_value_info['weight'];
@@ -907,6 +911,12 @@ class MyParcel_Shipment_Helper
         }
 
         return $class_weight->format($total_weight, $config->get('config_weight_class_id'), $class_language->get('decimal_point'), $class_language->get('thousand_point'));
+    }
+
+    public function getProductOptionValue($product_id, $product_option_value_id) {
+        $query = $this->db->query("SELECT pov.option_value_id, ovd.name, pov.quantity, pov.subtract, pov.price, pov.price_prefix, pov.points, pov.points_prefix, pov.weight, pov.weight_prefix FROM " . DB_PREFIX . "product_option_value pov LEFT JOIN " . DB_PREFIX . "option_value ov ON (pov.option_value_id = ov.option_value_id) LEFT JOIN " . DB_PREFIX . "option_value_description ovd ON (ov.option_value_id = ovd.option_value_id) WHERE pov.product_id = '" . (int)$product_id . "' AND pov.product_option_value_id = '" . (int)$product_option_value_id . "' AND ovd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+
+        return $query->row;
     }
 
     /**

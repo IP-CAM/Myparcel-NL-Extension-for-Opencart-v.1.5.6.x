@@ -1,7 +1,4 @@
 <?php
-/**
- * @version 1.0.1
- */
 class MyParcel
 {
     /**
@@ -32,9 +29,10 @@ class MyParcel
 
             self::$registry = $registry;
 
-            $this->lang = $registry->get('language');
-            $this->lang->load($this->getMyparcelModulePath());
-
+            if (empty($this->lang)) {
+                $this->lang = $registry->get('language');
+                $this->lang->load($this->getMyparcelModulePath());
+            }
             $this->shipment = require_once (dirname(__FILE__) . '/includes/class_myparcel_shipment.php');
             $this->notice = require_once (dirname(__FILE__) . '/includes/class_myparcel_notice.php');
             $this->session = require_once (dirname(__FILE__) . '/includes/class_myparcel_session.php');
@@ -43,6 +41,7 @@ class MyParcel
             $this->log = require_once (dirname(__FILE__) . '/includes/class_myparcel_log.php');
             $this->settings = require_once (dirname(__FILE__) . '/includes/class_myparcel_setting.php');
             $this->api = require_once (dirname(__FILE__) . '/includes/class_myparcel_api.php');
+            $this->url = require_once (dirname(__FILE__) . '/includes/class_myparcel_url.php');
         }
     }
 
