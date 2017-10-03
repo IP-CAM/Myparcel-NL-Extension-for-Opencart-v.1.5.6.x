@@ -191,7 +191,9 @@
 
       // Custom code
       window.parent.window.MYPARCEL_CHECKOUT.loading();
-
+      if (settings.deliverydays_window == 'disabled') {
+          settings.deliverydays_window = 1;
+      }
       options = {
         url: urlBase,
         data: {
@@ -204,7 +206,7 @@
           cutoff_time: settings.cutoff_time != null ? settings.cutoff_time : void 0,
           dropoff_days: settings.dropoff_days != null ? settings.dropoff_days : void 0,
           dropoff_delay: settings.dropoff_delay != null ? settings.dropoff_delay : void 0,
-          deliverydays_window: settings.deliverydays_window != null ? settings.deliverydays_window : void 0,
+          deliverydays_window: settings.deliverydays_window != null ? Math.max(1, settings.deliverydays_window) : void 0,
           exclude_delivery_type: settings.exclude_delivery_type != null ? settings.exclude_delivery_type : void 0
         },
         error: function() {

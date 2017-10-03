@@ -51,7 +51,7 @@ $settings = array(
     'exclude_delivery_type'	=> $exclude_delivery_types,
     'price'					=> $prices,
     'cutoff_time'			=> !empty($checkout_settings['cutoff_time']) ? $checkout_settings['cutoff_time'] : '',
-    'deliverydays_window'	=> !empty($checkout_settings['delivery_days_window']) ? max(1,$checkout_settings['delivery_days_window']) : '',
+    'deliverydays_window'	=> !empty($checkout_settings['delivery_days_window']) ? max(1,$checkout_settings['delivery_days_window']) : 'disabled',
     'dropoff_delay'			=> !empty($checkout_settings['dropoff_delay']) ? $checkout_settings['dropoff_delay'] : '',
     'dropoff_days'			=> !empty($checkout_settings['dropoff_days']) ? implode(';', $checkout_settings['dropoff_days'] ): '',
 );

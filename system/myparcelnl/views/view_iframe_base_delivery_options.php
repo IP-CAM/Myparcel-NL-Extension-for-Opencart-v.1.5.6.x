@@ -609,12 +609,14 @@
             <div id="mypa-slider">
                 <!-- First frame -->
                 <div id="mypa-delivery-type-selection" class="mypa-tab-container mypa-slider-pos-0">
-                    <div id="mypa-date-slider-left" class="mypa-arrow-left mypa-back-arrow mypa-date-slider-button mypa-slider-disabled"></div>
-                    <div id="mypa-date-slider-right" class="mypa-arrow-right myapa-next-arrow mypa-date-slider-button mypa-slider-disabled"></div>
-                    <div id="mypa-tabs-container">
+                    <?php $display_tabs = (MyParcel()->settings->checkout->delivery_days_window > 0) ? true : false; ?>
+                    <div id="mypa-date-slider-left" style="<?php echo $display_tabs ? '' : 'display: none;' ?>" class="mypa-arrow-left mypa-back-arrow mypa-date-slider-button mypa-slider-disabled"></div>
+                    <div id="mypa-date-slider-right" style="display:<?php echo $display_tabs ? '' : 'display: none;' ?>" class="mypa-arrow-right myapa-next-arrow mypa-date-slider-button mypa-slider-disabled"></div>
+                    <div id="mypa-tabs-container" style="<?php echo $display_tabs ? '' : 'display: none;' ?>">
                         <div id='mypa-tabs'>
                         </div>
                     </div>
+
                     <div class='mypa-delivery-content mypa-container-lg'>
                         <div class='mypa-header-lg mypa-delivery-header'>
                             <span><b>BEZORGOPTIES</b></span> <span class="mypa-location"></span>

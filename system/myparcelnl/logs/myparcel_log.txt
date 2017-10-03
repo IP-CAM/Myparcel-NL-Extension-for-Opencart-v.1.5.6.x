@@ -1354,3 +1354,483 @@ array (
     'Access-Control-Allow-Origin' => '*',
   ),
 )
+2017-08-30 09:13:11 https://api.myparcel.nl/shipments/23247825
+2017-08-30 09:13:13 API response (shipment 23247825):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'barcode' => NULL,
+          'id' => 23247825,
+          'parent_id' => 23245485,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 2,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 1,
+            'return' => 0,
+            'large_format' => 1,
+            'label_description' => '829',
+            'insurance' => 
+            array (
+              'amount' => 25000,
+              'currency' => 'EUR',
+            ),
+            'cooled_delivery' => 0,
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2017-05-16 08:57:50',
+          'modified' => '2017-05-16 08:57:50',
+          'reference_identifier' => NULL,
+          'price' => 
+          array (
+            'currency' => 'EUR',
+            'amount' => 919,
+          ),
+          'region' => 'NL',
+        ),
+      ),
+      'results' => 5000,
+      'page' => 1,
+      'size' => 1,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.10.3',
+    'Date' => 'Wed, 30 Aug 2017 07:13:21 GMT',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'X-Powered-By' => 'PHP/5.6.30-10+deb.sury.org~trusty+2',
+    'Access-Control-Allow-Origin' => '*',
+  ),
+)
+2017-08-30 09:13:20 *** -------------------------- ***
+2017-08-30 09:13:20 *** Creating shipments started ***
+2017-08-30 09:13:20 Prepared data:
+array (
+  0 => 
+  array (
+    'recipient' => 
+    array (
+      'cc' => 'NL',
+      'city' => 'hoofddorp',
+      'person' => 'Minh Dang',
+      'company' => '',
+      'email' => 'minhdang2@yopmail.com',
+      'phone' => '',
+      'street' => 'Hoofdweg',
+      'number' => '679',
+      'number_suffix' => '',
+      'postal_code' => '2131BC',
+    ),
+    'options' => 
+    array (
+      'package_type' => 1,
+      'only_recipient' => 1,
+      'signature' => 0,
+      'return' => 0,
+      'large_format' => 1,
+      'label_description' => '845',
+      'delivery_type' => 3,
+      'delivery_date' => '2017-08-31 18:00:00',
+    ),
+    'carrier' => 1,
+  ),
+)
+2017-08-30 09:13:20 https://api.myparcel.nl/shipments
+2017-08-30 09:13:22 API response (order 845):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'ids' => 
+      array (
+        0 => 
+        array (
+          'id' => 25767550,
+        ),
+      ),
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.10.3',
+    'Date' => 'Wed, 30 Aug 2017 07:13:31 GMT',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'X-Powered-By' => 'PHP/5.6.30-10+deb.sury.org~trusty+2',
+    'Access-Control-Allow-Origin' => '*',
+  ),
+)
+2017-08-30 09:13:22 *** Label request started ***
+2017-08-30 09:13:22 Shipment ID's: 25767550
+2017-08-30 09:13:22 https://api.myparcel.nl/shipment_labels/25767550
+2017-08-30 09:13:22 array (
+  0 => 'Accept: application/json; charset=UTF-8',
+  1 => 'Authorization: basic YzY0N2FjZWM5OWEzOWIwM2Y3ZTU1OGI1MzhhMzRmODVjNGMxNjI0Yg==',
+)
+2017-08-30 09:13:22 c647acec99a39b03f7e558b538a34f85c4c1624b
+2017-08-30 09:13:24 API response:
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'pdfs' => 
+      array (
+        'url' => '/pdfs/1592369f834bbe7485a33f9fb45bcedab3013952',
+      ),
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.10.3',
+    'Date' => 'Wed, 30 Aug 2017 07:13:33 GMT',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'X-Powered-By' => 'PHP/5.6.30-10+deb.sury.org~trusty+2',
+    'Access-Control-Allow-Origin' => '*',
+  ),
+)
+2017-08-30 09:13:24 *** -------------------- ***
+2017-08-30 09:13:24 *** Get Shipment Started ***
+2017-08-30 09:13:24 https://api.myparcel.nl/shipments/25767550
+2017-08-30 09:13:25 API response (shipment 25767550):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'barcode' => '3SMYPA639798516',
+          'id' => 25767550,
+          'parent_id' => NULL,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 1,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'city' => 'hoofddorp',
+            'person' => 'Minh Dang',
+            'company' => '',
+            'email' => 'minhdang2@yopmail.com',
+            'phone' => '',
+            'street' => 'Hoofdweg',
+            'number' => '679',
+            'number_suffix' => '',
+            'postal_code' => '2131BC',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 2,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 0,
+            'return' => 0,
+            'large_format' => 1,
+            'label_description' => '845',
+            'delivery_type' => 3,
+            'delivery_date' => '2017-08-31 18:00:00',
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2017-08-30 09:13:32',
+          'modified' => '2017-08-30 09:13:32',
+          'reference_identifier' => NULL,
+          'price' => 
+          array (
+            'currency' => 'EUR',
+            'amount' => 944,
+          ),
+          'region' => 'NL',
+        ),
+      ),
+      'results' => 5000,
+      'page' => 1,
+      'size' => 1,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.10.3',
+    'Date' => 'Wed, 30 Aug 2017 07:13:34 GMT',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'X-Powered-By' => 'PHP/5.6.30-10+deb.sury.org~trusty+2',
+    'Access-Control-Allow-Origin' => '*',
+  ),
+)
+2017-08-30 09:46:07 https://api.myparcel.nl/shipments/23247825
+2017-08-30 09:46:09 API response (shipment 23247825):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'barcode' => NULL,
+          'id' => 23247825,
+          'parent_id' => 23245485,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 2,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 1,
+            'return' => 0,
+            'large_format' => 1,
+            'label_description' => '829',
+            'insurance' => 
+            array (
+              'amount' => 25000,
+              'currency' => 'EUR',
+            ),
+            'cooled_delivery' => 0,
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2017-05-16 08:57:50',
+          'modified' => '2017-05-16 08:57:50',
+          'reference_identifier' => NULL,
+          'price' => 
+          array (
+            'currency' => 'EUR',
+            'amount' => 919,
+          ),
+          'region' => 'NL',
+        ),
+      ),
+      'results' => 5000,
+      'page' => 1,
+      'size' => 1,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.10.3',
+    'Date' => 'Wed, 30 Aug 2017 07:46:18 GMT',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'X-Powered-By' => 'PHP/5.6.30-10+deb.sury.org~trusty+2',
+    'Access-Control-Allow-Origin' => '*',
+  ),
+)
+2017-09-12 14:08:10 https://api.myparcel.nl/shipments/23247825
+2017-09-12 14:08:11 API response (shipment 23247825):
+array (
+  'code' => 200,
+  'body' => 
+  array (
+    'data' => 
+    array (
+      'shipments' => 
+      array (
+        0 => 
+        array (
+          'barcode' => NULL,
+          'id' => 23247825,
+          'parent_id' => 23245485,
+          'account_id' => 100098,
+          'shop_id' => 8467,
+          'shipment_type' => 2,
+          'recipient' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'sender' => 
+          array (
+            'cc' => 'NL',
+            'postal_code' => '1829cs',
+            'city' => 'Oudorp',
+            'street' => 'Neptunusstraat',
+            'number' => '22',
+            'number_suffix' => '',
+            'person' => 'Timo test test567',
+            'company' => 'mo',
+            'email' => 'test567@yopmail.com',
+            'phone' => '123',
+            'street_additional_info' => '',
+          ),
+          'status' => 1,
+          'options' => 
+          array (
+            'package_type' => 1,
+            'only_recipient' => 1,
+            'signature' => 1,
+            'return' => 0,
+            'large_format' => 1,
+            'label_description' => '829',
+            'insurance' => 
+            array (
+              'amount' => 25000,
+              'currency' => 'EUR',
+            ),
+            'cooled_delivery' => 0,
+          ),
+          'general_settings' => 
+          array (
+            'save_recipient_address' => 0,
+          ),
+          'pickup' => NULL,
+          'customs_declaration' => NULL,
+          'physical_properties' => NULL,
+          'created' => '2017-05-16 08:57:50',
+          'modified' => '2017-05-16 08:57:50',
+          'reference_identifier' => NULL,
+          'price' => 
+          array (
+            'currency' => 'EUR',
+            'amount' => 919,
+          ),
+          'region' => 'NL',
+        ),
+      ),
+      'results' => 5000,
+      'page' => 1,
+      'size' => 1,
+    ),
+  ),
+  'headers' => 
+  array (
+    'http_code' => 'HTTP/1.1 200 OK',
+    'Server' => 'nginx/1.10.3',
+    'Date' => 'Tue, 12 Sep 2017 12:08:16 GMT',
+    'Content-Type' => 'application/json;charset=utf-8',
+    'Transfer-Encoding' => 'chunked',
+    'Connection' => 'keep-alive',
+    'X-Powered-By' => 'PHP/5.6.30-10+deb.sury.org~trusty+2',
+    'Access-Control-Allow-Origin' => '*',
+  ),
+)

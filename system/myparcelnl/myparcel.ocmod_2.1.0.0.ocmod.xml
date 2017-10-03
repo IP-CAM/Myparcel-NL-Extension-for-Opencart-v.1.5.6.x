@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>MyParcel NL Extra For 2.1.0.0</name>
+    <version>1.0.6</version>
+    <code>MyParcelNL_Extra_For_OC_2.1.0.0</code>
+    <author>MyParcel NL</author>
+    <link>http://www.myparcelnl.com</link>
+
+    <!-- checked with compatible with Opencart 1x-->
+    <!-- yes is compatible, no is no compatible -->
+    <!-- ****************** ORDER_LIST.TPL ******************* -->
+    <!-- ***************************************************** -->
+	<file path="admin/controller/sale/order.php"><!-- checked -->
+        <operation><!-- no -->
+            <search><![CDATA[$data['invoice'] = $this->url->link('sale/order/invoice', 'token=' . $this->session->data['token'], 'SSL');]]></search>
+            <add position="before"><![CDATA[
+                $this->load->model('myparcelnl/helper');
+                $data['print_batch'] = $this->model_myparcelnl_helper->getContent('print_batch', array());
+                $data['export_batch'] = $this->model_myparcelnl_helper->getContent('export_batch', array());
+                $data['export_print_batch'] = $this->model_myparcelnl_helper->getContent('export_print_batch', array());
+            ]]></add>
+        </operation>
+    </file>
+</modification>
