@@ -1,7 +1,7 @@
 <?php
-class ModelExtensionShippingMyparcelShipping extends Model {
-	function getQuote($address) {
-
+class ModelShippingMyparcelShipping extends Model {
+	function getQuote($address)
+	{
 		$status = !empty($this->config->get('myparcel_shipping_status')) ? true : false;
 		$country_iso_code = isset($address['iso_code_2']) ? $address['iso_code_2'] : null;
 
@@ -16,7 +16,7 @@ class ModelExtensionShippingMyparcelShipping extends Model {
 			 * In the last step, OC needs to retrieve a list of shipment methods
 			 * But they don't pass order_id to getQuote function
 			 * So we need to add it via session
-			**/
+			 **/
 			if (isset($this->session->data['myparcel_order_id'])) {
 				if (!class_exists('MyParcel')) {
 					require_once DIR_SYSTEM . 'myparcelnl/class_myparcel.php';

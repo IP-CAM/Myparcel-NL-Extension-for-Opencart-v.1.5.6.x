@@ -58,7 +58,7 @@ $_['entry_tab_2_checkbox_connect_customer_email'] = 'When you connect the custom
 $_['entry_tab_2_title_connect_customer_phone'] = 'Connect customer phone';
 $_['entry_tab_2_checkbox_connect_customer_phone'] = 'When you connect the customer\'s phone number, the courier can use this for the delivery of the parcel. This greatly increases the delivery success rate for foreign shipments.';
 $_['entry_tab_2_title_extra_large_size'] = 'Extra large size (+ &euro;%s)';
-$_['entry_tab_2_checkbox_extra_large_size'] = 'Enable this option when your shipment is bigger than 100 x 70 x 50 cm, but smaller than 175 x 78 x 58 cm. An extra fee of &euro; 2,34 will be charged.<br/>
+$_['entry_tab_2_checkbox_extra_large_size'] = 'Enable this option when your shipment is bigger than 100 x 70 x 50 cm, but smaller than 175 x 78 x 58 cm. An extra fee of &euro; 2,45 will be charged.<br/>
 <strong>Note!</strong> If the parcel is bigger than 175 x 78 x 58 of or heavier than 30 kg, the pallet rate of &euro; 70,00 will be charged.';
 $_['entry_tab_2_title_address_only'] = 'Home address only (+ &euro;%s)';
 $_['entry_tab_2_checkbox_address_only'] = 'If you don\'t want the parcel to be delivered at the neighbours, choose this option.';

@@ -1,7 +1,7 @@
 <?php
-class ModelExtensionTotalMyparcelTotal extends Model
+class ModelTotalMyparcelTotal extends Model
 {
-	public function getTotal($total)
+	public function getTotal(&$total_data, &$total, &$taxes)
 	{
 		if ($this->cart->hasShipping() && isset($this->session->data['shipping_method'])) {
 
@@ -17,10 +17,6 @@ class ModelExtensionTotalMyparcelTotal extends Model
 					/** @var MyParcel_Shipment_Checkout $checkout_helper * */
 					$checkout_helper = MyParcel()->shipment->checkout;
 					$data = $this->session->data['myparcel'];
-
-					// Get current shipping title
-					$checkout_shipping_method = MyParcel()->shipment->shipment_helper->getShippingCodeByShippingQuote($this->session->data['shipping_method']['code']);
-
 					$total_array = $checkout_helper->getTotalArray($data);
 					$total_price = 0;
 
@@ -28,14 +24,8 @@ class ModelExtensionTotalMyparcelTotal extends Model
 						$total_price += $total_item['price'];
 					}
 
-					if(version_compare(VERSION, '2.3.0.0', '>=')) {
-						$this->load->language('extension/shipping/' . $checkout_shipping_method);
-					} else {
-						$this->load->language('shipping/' . $checkout_shipping_method);
-					}
-
 					if ($total_price > 0) {
-						$total['totals'][] = array(
+						$total_data[] = array(
 							'code' => 'myparcel_total',
 							'title' => $this->config->get('myparcel_shipping_title') .
 								'
@@ -44,11 +34,12 @@ class ModelExtensionTotalMyparcelTotal extends Model
 								'<i class="fa fa-caret-down"></i>
 							</a>
 						',
+							'text' => $this->currency->format($total_price),
 							'value' => $total_price,
 							'sort_order' => $this->config->get('myparcel_total_sort_order')
 						);
 
-						$total['total'] += $total_price;
+						$total += $total_price;
 					}
 				}
 			}

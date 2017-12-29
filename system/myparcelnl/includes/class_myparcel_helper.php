@@ -616,11 +616,11 @@ class MyParcel_Helper
         $data['entry_tab_2_checkbox_connect_customer_email'] = sprintf($language->get('entry_tab_2_checkbox_connect_customer_email'), '<a href="https://backoffice.myparcel.nl/ttsettingstable">MyParcel backend</a>');
         $data['entry_tab_2_title_connect_customer_phone']    = $language->get('entry_tab_2_title_connect_customer_phone');
         $data['entry_tab_2_checkbox_connect_customer_phone'] = $language->get('entry_tab_2_checkbox_connect_customer_phone');
-        $data['entry_tab_2_title_extra_large_size']          = sprintf($language->get('entry_tab_2_title_extra_large_size'), '2.34');
+        $data['entry_tab_2_title_extra_large_size']          = sprintf($language->get('entry_tab_2_title_extra_large_size'), '2.45');
         $data['entry_tab_2_checkbox_extra_large_size']       = $language->get('entry_tab_2_checkbox_extra_large_size');
-        $data['entry_tab_2_title_address_only']              = sprintf($language->get('entry_tab_2_title_address_only'), '0.27');
+        $data['entry_tab_2_title_address_only']              = sprintf($language->get('entry_tab_2_title_address_only'), '0.29');
         $data['entry_tab_2_checkbox_address_only']           = $language->get('entry_tab_2_checkbox_address_only');
-        $data['entry_tab_2_title_signature_delivery']        = sprintf($language->get('entry_tab_2_title_signature_delivery'), '0.35');
+        $data['entry_tab_2_title_signature_delivery']        = sprintf($language->get('entry_tab_2_title_signature_delivery'), '0.36');
         $data['entry_tab_2_checkbox_signature_delivery']     = $language->get('entry_tab_2_checkbox_signature_delivery');
         $data['entry_tab_2_title_return_no_answer']          = $language->get('entry_tab_2_title_return_no_answer');
         $data['entry_tab_2_checkbox_return_no_answer']       = $language->get('entry_tab_2_checkbox_return_no_answer');
